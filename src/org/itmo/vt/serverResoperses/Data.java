@@ -1,6 +1,6 @@
-package serverResoperses;
+package org.itmo.vt.serverResoperses;
 
-import entities.Point;
+import org.itmo.vt.entities.Point;
 
 import java.util.Collection;
 

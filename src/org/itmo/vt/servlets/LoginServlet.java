@@ -1,11 +1,11 @@
-package servlets;
+package org.itmo.vt.servlets;
 
 import com.google.gson.Gson;
-import ejb.DAO;
-import entities.Point;
-import entities.User;
-import serverResoperses.Data;
-import serverResoperses.Status;
+import org.itmo.vt.ejb.DAO;
+import org.itmo.vt.entities.Point;
+import org.itmo.vt.entities.User;
+import org.itmo.vt.serverResoperses.Data;
+import org.itmo.vt.serverResoperses.Status;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -22,9 +22,11 @@ public class LoginServlet extends HttpServlet {
     private DAO dao;
     private Gson gson = new Gson();
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
+        System.out.println(username);
         User userFromBD = dao.findUserByUserName(username);
         String strPass = req.getParameter("password");
         if(userFromBD == null) {

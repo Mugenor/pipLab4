@@ -1,15 +1,18 @@
-package ejb;
+package org.itmo.vt.ejb;
 
-import entities.Point;
-import entities.User;
+import org.itmo.vt.entities.Point;
+import org.itmo.vt.entities.User;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+@LocalBean
 @Stateful
 public class DAO {
-    @PersistenceUnit
+    @PersistenceContext(unitName = "myUnit")
     private EntityManager entityManager;
 
     public void saveUser(User user){
@@ -21,7 +24,8 @@ public class DAO {
         user.getPoints().add(point);
     }
 
-    public User findUserByUserName(String username){
+    public User findUserByUserName(String username) {
+        System.out.println("Entity manager: " + entityManager.toString());
         return entityManager.find(User.class, username);
     }
     public boolean isExist(User user){

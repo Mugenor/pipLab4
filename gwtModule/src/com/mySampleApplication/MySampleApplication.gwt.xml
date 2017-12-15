@@ -9,7 +9,7 @@
     <entry-point class='com.mySampleApplication.client.MySampleApplication'/>
 
 
-    <!-- Specify the app servlets.                   -->
+    <!-- Specify the app org.itmo.vt.servlets.                   -->
     <servlet path='/MySampleApplicationService' class='com.mySampleApplication.server.MySampleApplicationServiceImpl'/>
 
 </module>

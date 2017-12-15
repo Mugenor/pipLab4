@@ -1,9 +1,9 @@
-package servlets;
+package org.itmo.vt.servlets;
 
 import com.google.gson.Gson;
-import ejb.DAO;
-import entities.User;
-import serverResoperses.Status;
+import org.itmo.vt.ejb.DAO;
+import org.itmo.vt.entities.User;
+import org.itmo.vt.serverResoperses.Status;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;

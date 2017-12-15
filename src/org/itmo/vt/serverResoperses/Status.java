@@ -1,4 +1,4 @@
-package serverResoperses;
+package org.itmo.vt.serverResoperses;
 
 public class Status {
     private String status;

@@ -1,4 +1,4 @@
-package entities;
+package org.itmo.vt.entities;
 
 import javax.persistence.*;
 
