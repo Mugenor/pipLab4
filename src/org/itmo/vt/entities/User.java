@@ -2,8 +2,10 @@ package org.itmo.vt.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
-@Entity
+
+@Entity(name = "ourUser")
 @Table
 public class User {
     @Id
@@ -12,12 +14,11 @@ public class User {
     public Collection<Point> getPoints() {
         return points;
     }
-
     public void setPoints(Collection<Point> points) {
         this.points = points;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Point> points;
 
     public User(){}
@@ -55,5 +56,11 @@ public class User {
     @Override
     public int hashCode() {
         return username.hashCode();
+    }
+    public String toString(){
+        StringBuilder str = new StringBuilder("{\"username\":\"" + username + "\",\"password\":" + password + ",\"points\": [");
+        if(points!=null) points.forEach(str::append);
+        str.append("]}");
+        return str.toString();
     }
 }

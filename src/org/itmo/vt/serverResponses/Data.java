@@ -1,4 +1,4 @@
-package org.itmo.vt.serverResoperses;
+package org.itmo.vt.serverResponses;
 
 import org.itmo.vt.entities.Point;
 
@@ -6,6 +6,10 @@ import java.util.Collection;
 
 public class Data extends Status{
     private Collection<Point> points;
+
+    public Data(String status){
+        super(status);
+    }
 
     public Data(String status, Collection<Point> points){
         super(status);

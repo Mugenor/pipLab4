@@ -3,25 +3,33 @@ package org.itmo.vt.ejb;
 import org.itmo.vt.entities.Point;
 import org.itmo.vt.entities.User;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.*;
 
 @LocalBean
 @Stateful
 public class DAO {
-    @PersistenceContext(unitName = "myUnit")
-    private EntityManager entityManager;
+    private EntityManager entityManager = Persistence.createEntityManagerFactory("myUnit").createEntityManager();
+
+    @PostConstruct
+    public void init(){
+        System.out.println("DAO CREATED!!!");
+    }
 
     public void saveUser(User user){
+        entityManager.getTransaction().begin();
         entityManager.persist(user);
+        entityManager.getTransaction().commit();
     }
 
     public void addPointToUser(User user, Point point){
+        entityManager.getTransaction().begin();
         user = entityManager.find(User.class, user.getUsername());
         user.getPoints().add(point);
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
     }
 
     public User findUserByUserName(String username) {

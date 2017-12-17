@@ -28,7 +28,6 @@ public class MySampleApplication implements EntryPoint {
                 }
             }
         });
-
         // Assume that the host HTML has elements defined whose
         // IDs are "slot1", "slot2".  In a real app, you probably would not want
         // to hard-code IDs.  Instead, you could, for example, search for all

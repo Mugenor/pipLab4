@@ -1,4 +1,4 @@
-package org.itmo.vt.serverResoperses;
+package org.itmo.vt.serverResponses;
 
 public class Status {
     private String status;
