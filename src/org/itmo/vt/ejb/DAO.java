@@ -13,10 +13,6 @@ import javax.persistence.*;
 public class DAO {
     private EntityManager entityManager = Persistence.createEntityManagerFactory("myUnit").createEntityManager();
 
-    @PostConstruct
-    public void init(){
-        System.out.println("DAO CREATED!!!");
-    }
 
     public void saveUser(User user){
         entityManager.getTransaction().begin();

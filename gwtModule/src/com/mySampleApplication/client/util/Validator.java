@@ -1,4 +1,4 @@
-package com.mySampleApplication.client;
+package com.mySampleApplication.client.util;
 
 public class Validator {
     public static boolean checkX(String str) {
