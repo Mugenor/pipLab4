@@ -16,26 +16,32 @@ public class MySampleApplication implements EntryPoint {
      * This is the entry point method.
      */
     public void onModuleLoad() {
-        final Button button = new Button("Click me");
+        final Button button = new Button("Add point2");
         final Label label = new Label();
 
         button.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (label.getText().equals("")) {
-                    MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new MyAsyncCallback(label));
+         //           MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new MyAsyncCallback(label));
                 } else {
                     label.setText("");
                 }
             }
         });
 
-        // Assume that the host HTML has elements defined whose
-        // IDs are "slot1", "slot2".  In a real app, you probably would not want
-        // to hard-code IDs.  Instead, you could, for example, search for all
-        // elements with a particular CSS class and replace them with widgets.
-        //
-        RootPanel.get("slot1").add(button);
-        RootPanel.get("slot2").add(label);
+        button.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                boolean b = Validator.checkX(label.getText());
+                if (b) {label.setText("");
+                       // gwt alert or red label
+                      }
+                else {}
+            }
+        });
+
+    //    RootPanel.get("addButton").add(button);
+      /*  RootPanel.get("slot1").add(button);
+        RootPanel.get("slot2").add(label);*/
     }
 
     private static class MyAsyncCallback implements AsyncCallback<String> {

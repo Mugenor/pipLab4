@@ -1,3 +1,6 @@
 .idea/*
 out/*
 *.iml
+lib/javax.servlet.jsp-api.jar
+lib/javax.servlet-api.jar
+lib/javax.ejb-api.jar
