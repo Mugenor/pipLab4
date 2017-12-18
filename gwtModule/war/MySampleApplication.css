@@ -35,27 +35,26 @@ header {
     width: 99%;
 }
 
-#tableX {
+.tableX {
     margin-top: 5px;
 }
 
 .Xclass {
     margin-right: 3px;
-    background: #b5fff8;
 }
 
-#begin:hover, #addButton:hover, .Xclass:hover, .Rclass:hover {
+#exit:hover, .addButton:hover, .Xclass:hover input, .Rclass:hover input{
     background: #a5d6f3;
 }
 
-#tableX, #tableR{
+.tableX, .tableR{
     text-align: center;
     color: #b5fff8;
 }
 
 
 
-#addButton {
+.addButton {
     width: 60%;
     background: #b5fff8;
     outline: 2px solid #000000;
@@ -81,15 +80,16 @@ canvas {
     color: #b5fff8;
 }
 
-#y {
+.y {
     width: 86%;
 }
 
-#labelY {
+.labelY {
     margin-left: 1%;
+    color: #b5fff8;
 }
 
-#y:hover, #y:focus {
+.y:hover, .y:focus {
     background: #defff1;
 }
 
@@ -97,7 +97,7 @@ canvas {
     margin-top: 7px;
 }
 
-#begin {
+#exit {
     width: 100%;
     outline: 2px solid #000000;
     border: 2px solid #fff;
@@ -107,7 +107,7 @@ canvas {
     color: #001379;
 }
 
-#tableRes {
+.tableRes {
     width: 100%;
     background: url(resources/images/ocean9.jpg);
     outline: 2px solid #000000;
@@ -115,7 +115,10 @@ canvas {
     margin-top: 7px;
 }
 
-.headTable {
+.tableRes td {
+    padding: 0.5%;
+    border: 2px solid #d1f3ed;
+    width: 5%;
     text-align: center;
 }
 
@@ -125,17 +128,17 @@ canvas {
         margin-left: 15%;
         min-width: 300px;
     }
-    #tableX {
+    .tableX {
         width: 86%;
     }
-    #tableR {
+    .tableR {
         width: 42%;
     }
     canvas {
         width: 99.3%;
         min-width: 400px;
     }
-    #y {
+    .y {
         max-width: 300px;
     }
 }

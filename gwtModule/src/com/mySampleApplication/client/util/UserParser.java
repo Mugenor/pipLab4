@@ -6,8 +6,10 @@ import com.google.gwt.json.client.JSONParser;
 import com.mySampleApplication.client.data.Point;
 import com.mySampleApplication.client.data.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 public class UserParser {
     public static String encode(User user){
@@ -15,7 +17,7 @@ public class UserParser {
     }
     public static User decode(String json){
         User user = new User();
-        Collection<Point> points = new LinkedList<>();
+        List<Point> points = new ArrayList<>();
         JSONObject jsonObject = JSONParser.parseStrict(json).isObject();
         user.setUsername(jsonObject.get("username").isString().stringValue());
         user.setPassword((int)jsonObject.get("password").isNumber().doubleValue());
