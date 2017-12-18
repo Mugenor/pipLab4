@@ -1,12 +1,12 @@
 body {
-    background-image: url(resources/images/767.jpg);
+    background-image: url(../images/767.jpg);
     background-attachment: fixed;
     background-size: 100%;
 }
 
 header {
     text-align: right;
-    background: url(resources/images/ocean4.jpg) center bottom;
+    background: url(../images/ocean4.jpg) center bottom;
     font-family: fantasy;
     color: #b5fff8;
     outline: 2px solid #000000;
@@ -24,7 +24,7 @@ header {
 }
 
 #center {
-    background: url(resources/images/ocean8.jpg) center bottom;
+    background: url(../images/ocean8.jpg) center bottom;
     outline: 2px solid #000000;
     border: 2px solid #fff;
     color: #b5fff8;

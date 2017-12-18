@@ -29,7 +29,8 @@ public class UserService {
     @Path("/registration")
     @POST
     public Status registration(User user){
-        if(user.getUsername()==null || user.getUsername().trim().equals("") || user.getPassword()==null){
+        if(user == null || user.getUsername()==null || user.getUsername().trim().equals("") || user.getPassword()==null
+                || user.getUsername().length()>20 || user.getUsername().length()<4){
             return new Status("refused"); //Введите корректные данные
         }
         if(dao.findUserByUserName(user.getUsername())!=null){
@@ -44,7 +45,8 @@ public class UserService {
     @POST
     public Data login(User user, @Context HttpServletRequest request){
         System.out.println("DAO: " + dao);
-        if(user == null ||user.getUsername()==null ||user.getUsername().trim().equals("") ||  user.getPassword()==null){
+        if(user == null ||user.getUsername()==null ||user.getUsername().trim().equals("") ||  user.getPassword()==null
+                || user.getUsername().length()>20 || user.getUsername().length()<4){
             return new Data("refused"); //Введите корректные данные
         }
         User userFromBD = dao.findUserByUserName(user.getUsername());
@@ -63,10 +65,11 @@ public class UserService {
     @Path("/add")
     @POST
     public Status addPoint(UserPoint point, @Context HttpServletRequest request){
-        if(point.getX() == null || point.getY() == null || point.getR()==null
+        if(point ==null || point.getX() == null || point.getY() == null || point.getR()==null
                 || point.getX()>4.0 || point.getX()<-4.0
                 || point.getY()>5.0 || point.getY()<-5.0
-                || point.getR()<=0.0 || point.getR()>4.0){
+                || point.getR()<=0.0 || point.getR()>4.0
+                || point.getUsername() == null || point.getPassword() == null){
             return new Status("refused"); //Плохая точка
         }
         Point newPoint = new Point(point.getX(), point.getY(), point.getR());

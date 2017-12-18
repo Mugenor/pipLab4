@@ -1,5 +1,5 @@
 body {
-    background-image: url(resources/images/767.jpg);
+    background-image: url(../images/767.jpg);
     background-attachment: fixed;
     background-size: 100%;
     color: #001379;
@@ -7,7 +7,7 @@ body {
 
 header {
     text-align: right;
-    background: url(resources/images/ocean4.jpg) center bottom;
+    background: url(../images/ocean4.jpg) center bottom;
     font-family: fantasy;
     color: #b5fff8;
     outline: 2px solid #000000;
@@ -71,7 +71,7 @@ canvas {
 }
 
 #leftTop {
-    background: url(resources/images/ocean8.jpg);
+    background: url(../images/ocean8.jpg);
     outline: 2px solid #000000;
     border: 2px solid #fff;
     padding-left: 10%;
@@ -109,7 +109,7 @@ canvas {
 
 .tableRes {
     width: 100%;
-    background: url(resources/images/ocean9.jpg);
+    background: url(../images/ocean9.jpg);
     outline: 2px solid #000000;
     border: 2px solid #fff;
     margin-top: 7px;
