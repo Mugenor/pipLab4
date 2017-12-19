@@ -77,7 +77,6 @@ header {
 canvas {
     outline: 2px solid #000000;
     border: 2px solid #fff;
-    width: 500px;
 }
 
 #leftTop {

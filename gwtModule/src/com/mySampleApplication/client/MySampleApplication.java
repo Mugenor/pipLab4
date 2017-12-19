@@ -30,13 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySampleApplication implements EntryPoint {
-    Canvas canvas;
-    Context2d context;
-    static final int canvasWidth = 440;
-    static final int canvasHeight = 440;
-    int half = canvasWidth / 2;
-    int pad = canvasWidth / 44;
-    int mult = canvasWidth / 20;
+    private Canvas canvas;
+    private Context2d context;
+    private static final int canvasWidth = 440;
+    private static final int canvasHeight = 440;
+    private int half = canvasWidth / 2;
+    private int pad = canvasWidth / 44;
+    private int mult = canvasWidth / 20;
 
     private static final String beginPage = "Beginning.html";
     private final Storage storage = Storage.getSessionStorageIfSupported();
@@ -120,37 +120,7 @@ public class MySampleApplication implements EntryPoint {
                     return;
                 }
                 pointLabel.setText("");
-                UserPoint userPoint = new UserPoint();
-                userPoint.setUsername(user.getUsername());
-                userPoint.setPassword(user.getPassword());
-                userPoint.setX(x);
-                userPoint.setY(y);
-                userPoint.setR(r);
-                userClient.addPoint(userPoint, new MethodCallback<Status>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        Window.alert("Something went wrong!\n" + exception.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(Method method, Status response) {
-                        pointGrid.resizeRows(pointGrid.getRowCount()+1);
-                        pointGrid.setText(pointGrid.getRowCount()-1, 0, userPoint.getX().toString());
-                        pointGrid.setText(pointGrid.getRowCount()-1, 1, userPoint.getY().toString());
-                        pointGrid.setText(pointGrid.getRowCount()-1, 2, userPoint.getR().toString());
-                        pointGrid.setText(pointGrid.getRowCount()-1, 3, Boolean.toString(userPoint.checkHitted()));
-                        if(userPoint.checkHitted()){
-                            RootPanel.get().removeStyleName("dontGotIt");
-                            RootPanel.get().addStyleName("gotIt");
-                        } else {
-                            RootPanel.get().removeStyleName("gotIt");
-                            RootPanel.get().addStyleName("dontGotIt");
-                        }
-                        user.getPoints().add(new Point(userPoint.getX(), userPoint.getY(), userPoint.getR()));
-                        storage.removeItem("user");
-                        storage.setItem("user", UserParser.encode(user));
-                    }
-                });
+                sendPoint(x, y, r);
             }
         });
         if (user.getPoints().size() != 0) {
@@ -162,6 +132,22 @@ public class MySampleApplication implements EntryPoint {
                 pointGrid.setText(i + 1, 3, Boolean.toString(user.getPoints().get(i).checkHitted()));
             }
         }
+        canvas.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                int x = (event.getX() - half)/mult;
+                int y = (half - event.getY())/mult;
+                Double r = getR();
+                if(r!=null) {
+                    boolean hitted = sendPoint(x, y, r);
+                    context.setFillStyle(CssColor.make(hitted ? "green" : "red"));
+                    context.beginPath();
+                    context.arc(event.getX(), event.getY(), 3, 0, Math.PI * 2);
+                    context.closePath();
+                    context.fill();
+                }
+            }
+        });
     }
 
     public void printCanvas(int r) {
@@ -326,6 +312,7 @@ public class MySampleApplication implements EntryPoint {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     CheckBoxUnique.doUnique(RList, event);
+                    repaint(Double.valueOf(((CheckBox)event.getSource()).getFormValue()));
                 }
             });
             checkBox.setStyleName("Rclass");
@@ -361,6 +348,41 @@ public class MySampleApplication implements EntryPoint {
             }
         }
         return null;
+    }
+    private boolean sendPoint(double x, double y, double r) {
+        UserPoint userPoint = new UserPoint();
+        userPoint.setUsername(user.getUsername());
+        userPoint.setPassword(user.getPassword());
+        userPoint.setX(x);
+        userPoint.setY(y);
+        userPoint.setR(r);
+        userClient.addPoint(userPoint, new MethodCallback<Status>() {
+            @Override
+            public void onFailure(Method method, Throwable exception) {
+                Window.alert("Something went wrong!\n" + exception.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Method method, Status response) {
+                pointGrid.resizeRows(pointGrid.getRowCount() + 1);
+                pointGrid.setText(pointGrid.getRowCount() - 1, 0, userPoint.getX().toString());
+                pointGrid.setText(pointGrid.getRowCount() - 1, 1, userPoint.getY().toString());
+                pointGrid.setText(pointGrid.getRowCount() - 1, 2, userPoint.getR().toString());
+                userPoint.setHitted(userPoint.checkHitted());
+                pointGrid.setText(pointGrid.getRowCount() - 1, 3, userPoint.getHitted().toString());
+                if (userPoint.getHitted()) {
+                    RootPanel.get().removeStyleName("dontGotIt");
+                    RootPanel.get().addStyleName("gotIt");
+                } else {
+                    RootPanel.get().removeStyleName("gotIt");
+                    RootPanel.get().addStyleName("dontGotIt");
+                }
+                user.getPoints().add(new Point(userPoint.getX(), userPoint.getY(), userPoint.getR()));
+                storage.removeItem("user");
+                storage.setItem("user", UserParser.encode(user));
+            }
+        });
+        return userPoint.getHitted();
     }
 }
 
