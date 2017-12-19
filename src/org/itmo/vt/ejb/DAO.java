@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @LocalBean
 @Stateful
@@ -23,6 +24,9 @@ public class DAO {
     public void addPointToUser(User user, Point point){
         entityManager.getTransaction().begin();
         user = entityManager.find(User.class, user.getUsername());
+        if(user.getPoints()==null){
+            user.setPoints(new ArrayList<>());
+        }
         user.getPoints().add(point);
         entityManager.merge(user);
         entityManager.getTransaction().commit();

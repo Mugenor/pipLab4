@@ -1,7 +1,7 @@
 <html>
 <head>
     <link rel="shortcut icon" href="resources/images/favicon.png" type="image/png" />
-    <link type="text/css" rel="stylesheet" href="MySampleApplication.css">
+    <link type="text/css" rel="stylesheet" href="resources/css/MySampleApplication.css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Special For You</title>
 
@@ -25,91 +25,10 @@
 
 <form id="form">
     <div id="left">
-        <button id="begin" action="toBeginning">Exit</button>
+        <button id="exit">Exit</button>
         <audio id="audio" src="resources/music/ariel.mp3" autoplay loop controls></audio>
         <div id="leftTop">
-            <table id="tableX">
-                <tr>
-                    <td><label>X: </label></td>
-                    <td>-4</td>
-                    <td>-3</td>
-                    <td>-2</td>
-                    <td>-1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Xclass"/>
-                    </td>
-                </tr>
-            </table>
-            <label id="labelY"> Y: </label>
-            <input type="text" maxLength="5" id="y"/>
-            <table id="tableR">
-                <tr>
-                    <td><label>R: </label></td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Rclass" value="1"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Rclass" value="2"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Rclass" value="3"/>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="Rclass" value="4"/>
-                    </td>
-                </tr>
-            </table>
-            <button id="addButton">Add point</button>
         </div>
-        <table id="tableRes" cellpadding="3%" border="1%">
-            <tr>
-                <td class="headTable" style="width: 5%;"> X </td>
-                <td class="headTable" style="width: 5%;"> Y </td>
-                <td class="headTable" style="width: 5%;"> R </td>
-                <td class="headTable" style="width: 5%;"> Is Hitted </td>
-            </tr>
-        </table>
     </div>
     <div id="right"/>
 </form>

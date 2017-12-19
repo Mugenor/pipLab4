@@ -1,14 +1,14 @@
 package com.mySampleApplication.client.data;
 
 import java.util.Collection;
-
+import java.util.List;
 
 
 public class User {
     private String username;
     private Integer password;
 
-    private Collection<Point> points;
+    private List<Point> points;
 
     public User(){}
 
@@ -17,10 +17,10 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Point> getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
-    public void setPoints(Collection<Point> points) {
+    public void setPoints(List<Point> points) {
         this.points = points;
     }
 
@@ -56,7 +56,12 @@ public class User {
     }
     public String toString(){
         StringBuilder str = new StringBuilder("{\"username\":\"" + username + "\",\"password\":" + password + ",\"points\": [");
-        if(points!=null) points.forEach(str::append);
+        if(points!=null) {
+            for(int i=0;i<points.size()-1;i++){
+                str.append(points.get(i)).append(',');
+            }
+            str.append(points.get(points.size()-1));
+        }
         str.append("]}");
         return str.toString();
     }

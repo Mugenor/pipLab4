@@ -1,0 +1,181 @@
+body {
+    background-image: url(../images/767.jpg);
+    background-attachment: fixed;
+    background-size: 100%;
+    color: #001379;
+}
+
+header {
+    text-align: right;
+    background: url(../images/ocean4.jpg) center bottom;
+    font-family: fantasy;
+    color: #b5fff8;
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    padding-bottom: 0.4%;
+    padding-right: 1.5%;
+}
+
+#name {
+    font-size: 270%;
+}
+
+#group {
+    font-size: 150%;
+}
+
+#left {
+    width: 23%;
+}
+
+#audio {
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    margin-top: 7px;
+    width: 99%;
+}
+
+.tableX {
+    margin-top: 5px;
+}
+
+.Xclass {
+    margin-right: 3px;
+}
+
+#exit:hover, .addButton:hover, .Xclass:hover input, .Rclass:hover input{
+    background: #a5d6f3;
+}
+
+.tableX, .tableR{
+    text-align: center;
+    color: #b5fff8;
+}
+
+
+
+.addButton {
+    width: 60%;
+    background: #b5fff8;
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    margin-left: 19%;
+    margin-bottom: 8px;
+    color: #001379;
+}
+
+canvas {
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    width: 500px;
+}
+
+#leftTop {
+    background: url(../images/ocean8.jpg);
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 7px;
+    color: #b5fff8;
+}
+
+.y {
+    width: 86%;
+}
+
+.labelY {
+    margin-left: 1%;
+    color: #b5fff8;
+}
+
+.y:hover, .y:focus {
+    background: #defff1;
+}
+
+#right {
+    margin-top: 7px;
+}
+
+#exit {
+    width: 100%;
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    background: #b5fff8;
+    font-size: 12pt;
+    margin-top: 7px;
+    color: #001379;
+}
+
+.tableRes {
+    width: 100%;
+    background: url(../images/ocean9.jpg);
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+    margin-top: 7px;
+}
+
+.tableRes td {
+    padding: 0.5%;
+    border: 2px solid #d1f3ed;
+    width: 5%;
+    text-align: center;
+}
+
+.mainCanvas {
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+}
+
+@media screen and (max-width: 749px) {
+    body {
+        background-image: url(resources/images/ariel_small.jpg);
+    }
+    #left {
+        width: 70%;
+        margin-left: 15%;
+        min-width: 300px;
+    }
+    #right {
+        margin-left: 15%;
+    }
+    .tableX {
+        width: 86%;
+    }
+    .tableR {
+        width: 42%;
+    }
+    canvas {
+        width: 99.3%;
+        min-width: 400px;
+    }
+    .y {
+        max-width: 300px;
+    }
+}
+
+@media screen and (min-width: 749px) and (max-width: 1217px) {
+    #left {
+        float: left;
+        width: 40%;
+        max-width: 330px;
+    }
+    #right {
+        float: right;
+        width: 58%;
+    }
+    .mainCanvas {
+        float: right;
+    }
+}
+
+@media screen and (min-width: 1217px) {
+    #left {
+        float: left;
+    }
+    #right {
+        float: right;
+    }
+}
+
+

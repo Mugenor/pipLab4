@@ -9,6 +9,7 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.mySampleApplication.client.data.Data;
@@ -22,70 +23,138 @@ import org.fusesource.restygwt.client.MethodCallback;
 
 public class Beginning implements EntryPoint {
     private Storage storage = Storage.getSessionStorageIfSupported();
+    private UserClient userClient = GWT.create(UserClient.class);
+    private Label usernameErrorLabel = Label.wrap(DOM.getElementById("erUsername"));
+    private Label passwordErrorLabel = Label.wrap(DOM.getElementById("erPassword"));
+    private TextBox usernameTextBox = TextBox.wrap(DOM.getElementById("username"));
+    private PasswordTextBox passwordTextBox = PasswordTextBox.wrap(DOM.getElementById("password"));
 
     @Override
     public void onModuleLoad() {
         Defaults.setServiceRoot(GWT.getHostPageBaseURL());
+        if (storage == null) {
+            Window.alert("Sorry but storage is not supported!");
+        } else {
+            tryToLogIn();
 
-        UserClient userClient = GWT.create(UserClient.class);
-        Button registrationButton = Button.wrap(DOM.getElementById("registration"));
-        Button loginButton = Button.wrap(DOM.getElementById("entry"));
-        TextBox usernameTextBox = TextBox.wrap(DOM.getElementById("username"));
-        PasswordTextBox passwordTextBox = PasswordTextBox.wrap(DOM.getElementById("password"));
+            Button registrationButton = Button.wrap(DOM.getElementById("registration"));
+            Button loginButton = Button.wrap(DOM.getElementById("entry"));
 
-        registrationButton.addClickHandler(new ClickHandler() {
-           @Override
-           public void onClick(ClickEvent event) {
-               User newUser = new User(usernameTextBox.getText(), passwordTextBox.getText().hashCode());
-               userClient.register(newUser, new MethodCallback<Status>() {
-                   @Override
-                   public void onFailure(Method method, Throwable exception) {
-                       Window.alert("Can't register this user\nCause: " + exception.getMessage());
-                   }
-
-                   @Override
-                   public void onSuccess(Method method, Status response) {
-                        if(response.getStatus().equals("success")){
-                            Window.alert("Registration was done successful!");
-                        } else {
-                            Window.alert("Can't register this user\nMethod: " + method.getResponse().getText());
-                        }
-                   }
-               });
-           }
-       });
-
-        loginButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                User user = new User(usernameTextBox.getText(), passwordTextBox.getText().hashCode());
-                userClient.loginIn(user, new MethodCallback<Data>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        Window.alert("Can't log in this user\nCause: " + exception.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(Method method, Data response) {
-                        if(response.getStatus().equals("success")){
-                            Window.alert("Log in was done successful!");
-                            if(storage.getItem("user") != null){
-                                storage.removeItem("user");
+            registrationButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    registrationButton.setEnabled(false);
+                    loginButton.setEnabled(false);
+                    if (checkUsernameAndPassword()) {
+                        User newUser = new User(usernameTextBox.getText(), passwordTextBox.getText().hashCode());
+                        userClient.register(newUser, new MethodCallback<Status>() {
+                            @Override
+                            public void onFailure(Method method, Throwable exception) {
+                                Window.alert("Can't register this user\nCause: " + exception.getMessage());
+                                registrationButton.setEnabled(true);
+                                loginButton.setEnabled(true);
                             }
-                            try {
-                                storage.setItem("user", UserParser.encode(user));
-                                Window.alert(UserParser.encode(user));
-                            } catch (NullPointerException e){
-                                Window.alert("Sorry, but session storage does not supported by this browser!");
+
+                            @Override
+                            public void onSuccess(Method method, Status response) {
+                                if (response.getStatus().equals("success")) {
+                                    Window.alert("Registration was done successful!");
+                                } else {
+                                    Window.alert("Can't register this user\nMethod: " + method.getResponse().getText());
+                                }
+                                registrationButton.setEnabled(true);
+                                loginButton.setEnabled(true);
                             }
-                            Window.Location.assign(GWT.getHostPageBaseURL() + "MySampleApplication.html");
-                        } else {
-                            Window.alert("Can't log in this user\nMethod: " + method.getResponse().getText());
-                        }
+                        });
+                    } else {
+                        registrationButton.setEnabled(true);
+                        loginButton.setEnabled(true);
                     }
-                });
-            }
-        });
+                }
+            });
+
+            loginButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    registrationButton.setEnabled(false);
+                    loginButton.setEnabled(false);
+                    if(checkUsernameAndPassword()) {
+                        User user = new User(usernameTextBox.getText(), passwordTextBox.getText().hashCode());
+                        userClient.loginIn(user, new MethodCallback<Data>() {
+                            @Override
+                            public void onFailure(Method method, Throwable exception) {
+                                Window.alert("Can't log in this user\nCause: " + exception.getMessage());
+                                registrationButton.setEnabled(true);
+                                loginButton.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onSuccess(Method method, Data response) {
+                                if (response.getStatus().equals("success")) {
+                                    user.setPoints(response.getPoints());
+                                    logIn(user);
+                                } else {
+                                    Window.alert("Can't log in this user\nMethod: " + method.getResponse().getText());
+                                }
+                                registrationButton.setEnabled(true);
+                                loginButton.setEnabled(true);
+                            }
+                        });
+                    } else {
+                        registrationButton.setEnabled(true);
+                        loginButton.setEnabled(true);
+                    }
+                }
+            });
+        }
     }
 
+    private void logIn(User user){
+        Window.alert("Log in was done successful!");
+        if (storage.getItem("user") != null) {
+            storage.removeItem("user");
+        }
+        storage.setItem("user", UserParser.encode(user));
+        Window.alert(UserParser.encode(user));
+        Window.Location.assign(GWT.getHostPageBaseURL() + "MySampleApplication.html");
+    }
+
+    private void tryToLogIn(){
+        String userJson = storage.getItem("user");
+        if(userJson!=null){
+            User user = UserParser.decode(userJson);
+            userClient.loginIn(user, new MethodCallback<Data>() {
+                @Override
+                public void onFailure(Method method, Throwable exception) {
+                    storage.removeItem("user");
+                }
+
+                @Override
+                public void onSuccess(Method method, Data response) {
+                    if(response.getStatus().equals("success")){
+                        user.setPoints(response.getPoints());
+                        logIn(user);
+                    } else {
+                        storage.removeItem("user");
+                    }
+                }
+            });
+        }
+    }
+    private boolean checkUsernameAndPassword(){
+        boolean isCorrect = true;
+        if(usernameTextBox.getText().length()<4 || usernameTextBox.getText().length()>20){
+            isCorrect=false;
+            usernameErrorLabel.setText("Username must have from 4 to 20 characters!");
+        } else {
+            usernameErrorLabel.setText("");
+        }
+        if(passwordTextBox.getText().length()<4){
+            isCorrect=false;
+            passwordErrorLabel.setText("Password must have more than 4 characters!");
+        } else {
+            passwordErrorLabel.setText("");
+        }
+        return isCorrect;
+    }
 }

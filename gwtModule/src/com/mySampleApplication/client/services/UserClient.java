@@ -1,9 +1,6 @@
 package com.mySampleApplication.client.services;
 
-import com.mySampleApplication.client.data.Data;
-import com.mySampleApplication.client.data.Point;
-import com.mySampleApplication.client.data.Status;
-import com.mySampleApplication.client.data.User;
+import com.mySampleApplication.client.data.*;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 
@@ -22,7 +19,7 @@ public interface UserClient extends RestService{
 
     @POST
     @Path("/add")
-    void addPoint(Point point, MethodCallback<Status> callback);
+    void addPoint(UserPoint point, MethodCallback<Status> callback);
 
     @POST
     @Path("/exit")

@@ -2,6 +2,7 @@ package org.itmo.vt.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 
@@ -11,15 +12,15 @@ public class User {
     @Id
     private String username;
     private Integer password;
-    public Collection<Point> getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
-    public void setPoints(Collection<Point> points) {
+    public void setPoints(List<Point> points) {
         this.points = points;
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Collection<Point> points;
+    private List<Point> points;
 
     public User(){}
     public User(String username, Integer password){
@@ -59,7 +60,12 @@ public class User {
     }
     public String toString(){
         StringBuilder str = new StringBuilder("{\"username\":\"" + username + "\",\"password\":" + password + ",\"points\": [");
-        if(points!=null) points.forEach(str::append);
+        if(points!=null) {
+            for(int i=0;i<points.size()-1;i++){
+                str.append(points.get(i)).append(',');
+            }
+            str.append(points.get(points.size()-1));
+        }
         str.append("]}");
         return str.toString();
     }

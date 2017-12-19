@@ -14,7 +14,7 @@ public class Point {
         this.x = x;
         this.y = y;
         this.r = r;
-        checkHitted();
+        isHitted = checkHitted();
     }
     public boolean checkHitted(){
         return (x>=0.0 && y>=0.0 && (x*x+y*y)<=(r*r/4)) ||

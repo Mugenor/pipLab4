@@ -10,7 +10,6 @@ public class PointParser {
         point.setY(jsonObject.get("y").isNumber().doubleValue());
         point.setR(jsonObject.get("r").isNumber().doubleValue());
         point.setHitted(point.checkHitted());
-        point.setId((int)jsonObject.get("id").isNumber().doubleValue());
         return point;
     }
 }
