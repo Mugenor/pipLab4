@@ -93,7 +93,7 @@ canvas {
     background: #defff1;
 }
 
-.right {
+#right {
     margin-top: 7px;
 }
 
@@ -119,21 +119,28 @@ canvas {
     text-align: center;
 }
 
+.mainCanvas {
+    outline: 2px solid #000000;
+    border: 2px solid #fff;
+}
+
 @media screen and (max-width: 749px) {
+    body {
+        background-image: url(resources/images/ariel_small.jpg);
+    }
     #left {
         width: 70%;
         margin-left: 15%;
         min-width: 300px;
+    }
+    #right {
+        margin-left: 15%;
     }
     #tableX {
         width: 86%;
     }
     #tableR {
         width: 42%;
-    }
-    canvas {
-        width: 99.3%;
-        min-width: 400px;
     }
     #y {
         max-width: 300px;
@@ -146,14 +153,12 @@ canvas {
         width: 40%;
         max-width: 330px;
     }
-    .right {
+    #right {
         float: right;
         width: 58%;
     }
-    canvas {
-        width: 90%;
+    .mainCanvas {
         float: right;
-        max-width: 500px;
     }
 }
 
@@ -161,7 +166,9 @@ canvas {
     #left {
         float: left;
     }
-    .right {
+    #right {
         float: right;
     }
 }
+
+
