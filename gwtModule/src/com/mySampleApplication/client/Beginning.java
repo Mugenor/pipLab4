@@ -26,6 +26,7 @@ public class Beginning implements EntryPoint {
     private UserClient userClient = GWT.create(UserClient.class);
     private Label usernameErrorLabel = Label.wrap(DOM.getElementById("erUsername"));
     private Label passwordErrorLabel = Label.wrap(DOM.getElementById("erPassword"));
+    private Label regStatus = Label.wrap(DOM.getElementById("regStatus"));
     private TextBox usernameTextBox = TextBox.wrap(DOM.getElementById("username"));
     private PasswordTextBox passwordTextBox = PasswordTextBox.wrap(DOM.getElementById("password"));
 
@@ -58,9 +59,13 @@ public class Beginning implements EntryPoint {
                             @Override
                             public void onSuccess(Method method, Status response) {
                                 if (response.getStatus().equals("success")) {
-                                    Window.alert("Registration was done successful!");
+                                    regStatus.removeStyleName("regStatusBad");
+                                    regStatus.addStyleName("regStatusGood");
+                                    regStatus.setText("Registration successful!");
                                 } else {
-                                    Window.alert("Can't register this user\nMethod: " + method.getResponse().getText());
+                                    regStatus.removeStyleName("regStatusGood");
+                                    regStatus.addStyleName("regStatusBad");
+                                    regStatus.setText("Registration failed!");
                                 }
                                 registrationButton.setEnabled(true);
                                 loginButton.setEnabled(true);
@@ -94,7 +99,9 @@ public class Beginning implements EntryPoint {
                                     user.setPoints(response.getPoints());
                                     logIn(user);
                                 } else {
-                                    Window.alert("Can't log in this user\nMethod: " + method.getResponse().getText());
+                                    regStatus.removeStyleName("regStatusGood");
+                                    regStatus.addStyleName("regStatusBad");
+                                    regStatus.setText("Log in failed!");
                                 }
                                 registrationButton.setEnabled(true);
                                 loginButton.setEnabled(true);
@@ -110,12 +117,10 @@ public class Beginning implements EntryPoint {
     }
 
     private void logIn(User user){
-        Window.alert("Log in was done successful!");
         if (storage.getItem("user") != null) {
             storage.removeItem("user");
         }
         storage.setItem("user", UserParser.encode(user));
-        Window.alert(UserParser.encode(user));
         Window.Location.assign(GWT.getHostPageBaseURL() + "MySampleApplication.html");
     }
 
@@ -147,13 +152,13 @@ public class Beginning implements EntryPoint {
             isCorrect=false;
             usernameErrorLabel.setText("Username must have from 4 to 20 characters!");
         } else {
-            usernameErrorLabel.setText("");
+            usernameErrorLabel.setText("  ");
         }
         if(passwordTextBox.getText().length()<4){
             isCorrect=false;
             passwordErrorLabel.setText("Password must have more than 4 characters!");
         } else {
-            passwordErrorLabel.setText("");
+            passwordErrorLabel.setText("  ");
         }
         return isCorrect;
     }

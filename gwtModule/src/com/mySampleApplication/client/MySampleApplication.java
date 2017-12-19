@@ -37,6 +37,7 @@ public class MySampleApplication implements EntryPoint {
     private List<CheckBox> XList = new ArrayList<>();
     private List<CheckBox> RList = new ArrayList<>();
     private TextBox yText;
+    private Label pointLabel = Label.wrap(DOM.getElementById("pointLabel"));
 
     public void onModuleLoad() {
         Defaults.setServiceRoot(GWT.getHostPageBaseURL());
@@ -91,10 +92,20 @@ public class MySampleApplication implements EntryPoint {
                 Double y = getY();
                 Double r = getR();
                 if(x==null || y==null || r==null){
-                    Window.alert("Incorrect data!");
-                    Window.alert("X: " + x + "\nY: " + y + "\nR: " + r);
+                    StringBuilder str = new StringBuilder();
+                    if(x==null){
+                        str.append("X must be from -4 to 4!\n");
+                    }
+                    if(y==null){
+                        str.append("Y must be from -5 to 5!\n");
+                    }
+                    if(r==null){
+                        str.append("R must be from 1 to 4!");
+                    }
+                    pointLabel.setText(str.toString());
                     return;
                 }
+                pointLabel.setText("");
                 UserPoint userPoint = new UserPoint();
                 userPoint.setUsername(user.getUsername());
                 userPoint.setPassword(user.getPassword());
@@ -114,7 +125,16 @@ public class MySampleApplication implements EntryPoint {
                         pointGrid.setText(pointGrid.getRowCount()-1, 1, userPoint.getY().toString());
                         pointGrid.setText(pointGrid.getRowCount()-1, 2, userPoint.getR().toString());
                         pointGrid.setText(pointGrid.getRowCount()-1, 3, Boolean.toString(userPoint.checkHitted()));
+                        if(userPoint.checkHitted()){
+                            RootPanel.get().removeStyleName("dontGotIt");
+                            RootPanel.get().addStyleName("gotIt");
+                        } else {
+                            RootPanel.get().removeStyleName("gotIt");
+                            RootPanel.get().addStyleName("dontGotIt");
+                        }
                         user.getPoints().add(new Point(userPoint.getX(), userPoint.getY(), userPoint.getR()));
+                        storage.removeItem("user");
+                        storage.setItem("user", UserParser.encode(user));
                     }
                 });
             }

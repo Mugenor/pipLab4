@@ -14,7 +14,18 @@ header {
     padding-bottom: 0.4%;
     padding-right: 1.5%;
 }
-
+.regStatusGood {
+    padding-left: 30%;
+    color: greenyellow;
+    width: 100%;
+    text-align: center;
+}
+.regStatusBad {
+    padding-left: 30%;
+    color: red;
+    width: 100%;
+    text-align: center;
+}
 #name {
     font-size: 270%;
 }
@@ -28,7 +39,6 @@ header {
     outline: 2px solid #000000;
     border: 2px solid #fff;
     color: #b5fff8;
-    align: center;
     margin-top: 18%;
     margin-left: 37%;
     width: 20%;

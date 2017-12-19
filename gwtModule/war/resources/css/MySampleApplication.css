@@ -52,7 +52,17 @@ header {
     color: #b5fff8;
 }
 
+#pointLabel {
+    font-size: 14px;
+    color:red;
+}
 
+.gotIt{
+    background-image: url(../images/ariel.gif);
+}
+.dontGotIt{
+    background-image: url(../images/ariel2.gif);
+}
 
 .addButton {
     width: 60%;
