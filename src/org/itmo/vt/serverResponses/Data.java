@@ -1,19 +1,19 @@
 package org.itmo.vt.serverResponses;
 
 import org.itmo.vt.entities.Point;
-
-import java.util.Collection;
 import java.util.List;
 
-public class Data extends Status{
+public class Data extends Status {
     private List<Point> points;
 
-    public Data(){}
-    public Data(String status){
+    public Data() {
+    }
+
+    public Data(String status) {
         super(status);
     }
 
-    public Data(String status, List<Point> points){
+    public Data(String status, List<Point> points) {
         super(status);
         this.points = points;
     }

@@ -7,8 +7,6 @@ import com.mySampleApplication.client.data.Point;
 import com.mySampleApplication.client.data.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class UserParser {

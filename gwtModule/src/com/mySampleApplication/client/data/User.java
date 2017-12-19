@@ -1,6 +1,5 @@
 package com.mySampleApplication.client.data;
 
-import java.util.Collection;
 import java.util.List;
 
 

@@ -20,8 +20,4 @@ public interface UserClient extends RestService{
     @POST
     @Path("/add")
     void addPoint(UserPoint point, MethodCallback<Status> callback);
-
-    @POST
-    @Path("/exit")
-    void exit(User user, MethodCallback<Status> callback);
 }

@@ -26,6 +26,8 @@ import com.mySampleApplication.client.util.YValidator;
 import org.fusesource.restygwt.client.Defaults;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+
+import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class MySampleApplication implements EntryPoint {
     private static final int canvasHeight = 440;
     private int half = canvasWidth / 2;
     private int pad = canvasWidth / 44;
-    private int mult = canvasWidth / 20;
+    private int mult = canvasWidth / 10;
 
     private static final String beginPage = "Beginning.html";
     private final Storage storage = Storage.getSessionStorageIfSupported();
@@ -48,7 +50,10 @@ public class MySampleApplication implements EntryPoint {
     private List<CheckBox> XList = new ArrayList<>();
     private List<CheckBox> RList = new ArrayList<>();
     private TextBox yText;
-    private Label pointLabel = new Label();
+    private Label xErrorLabel = new Label();
+    private Label yErrorLabel = new Label();
+    private Label rErrorLabel = new Label();
+
 
     public void onModuleLoad() {
         Defaults.setServiceRoot(GWT.getHostPageBaseURL());
@@ -61,7 +66,16 @@ public class MySampleApplication implements EntryPoint {
         if (userJson == null) {
             Window.Location.assign(GWT.getHostPageBaseURL() + beginPage);
         }
-        user = UserParser.decode(userJson);
+//        try {
+            user = UserParser.decode(userJson);
+//        }catch (Exception e){
+//            storage.removeItem("user");
+//            Window.Location.assign(GWT.getHostPageBaseURL() + beginPage);
+//        }
+        xErrorLabel.addStyleName("errorLabel");
+        yErrorLabel.addStyleName("errorLabel");
+        rErrorLabel.addStyleName("errorLabel");
+
         buildXGrid();
         buildRGrid();
         buildPointGrid();
@@ -81,14 +95,16 @@ public class MySampleApplication implements EntryPoint {
         addButton.addStyleName("addButton");
 
         RootPanel.get("leftTop").add(xGrid);
+        RootPanel.get("leftTop").add(xErrorLabel);
         RootPanel.get("leftTop").add(verticalPanel);
+        RootPanel.get("leftTop").add(yErrorLabel);
         RootPanel.get("leftTop").add(rGrid);
+        RootPanel.get("leftTop").add(rErrorLabel);
         RootPanel.get("leftTop").add(addButton);
         RootPanel.get("left").add(pointGrid);
 
 
         printCanvas(3);
-        RootPanel.get().add(pointLabel);
         Button exitButton = Button.wrap(DOM.getElementById("exit"));
         exitButton.addClickHandler(new ClickHandler() {
             @Override
@@ -102,24 +118,30 @@ public class MySampleApplication implements EntryPoint {
         addButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Double x = getX();
-                Double y = getY();
-                Double r = getR();
-                if(x==null || y==null || r==null){
-                    StringBuilder str = new StringBuilder();
-                    if(x==null){
-                        str.append("X must be from -4 to 4!\n");
-                    }
-                    if(y==null){
-                        str.append("Y must be from -5 to 5!\n");
-                    }
-                    if(r==null){
-                        str.append("R must be from 1 to 4!");
-                    }
-                    pointLabel.setText(str.toString());
+                Double x;
+                Double y;
+                Double r;
+                try {
+                    x = getX();
+                }catch (RuntimeException e){
+                    xErrorLabel.setText(e.getMessage());
                     return;
                 }
-                pointLabel.setText("");
+                xErrorLabel.setText("");
+                 try{
+                    y = getY();
+                 }catch (RuntimeException e){
+                    yErrorLabel.setText(e.getMessage());
+                    return;
+                 }
+                 yErrorLabel.setText("");
+                 try {
+                    r = getR();
+                 } catch (RuntimeException e){
+                    rErrorLabel.setText("Invalid r!");
+                    return;
+                 }
+                 rErrorLabel.setText("");
                 sendPoint(x, y, r);
             }
         });
@@ -135,16 +157,11 @@ public class MySampleApplication implements EntryPoint {
         canvas.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                int x = (event.getX() - half)/mult;
-                int y = (half - event.getY())/mult;
+                double x = ((double)event.getX() - half)/mult;
+                double y = ((double)half - event.getY())/mult;
                 Double r = getR();
                 if(r!=null) {
-                    boolean hitted = sendPoint(x, y, r);
-                    context.setFillStyle(CssColor.make(hitted ? "green" : "red"));
-                    context.beginPath();
-                    context.arc(event.getX(), event.getY(), 3, 0, Math.PI * 2);
-                    context.closePath();
-                    context.fill();
+                    sendPoint(x, y, r);
                 }
             }
         });
@@ -166,11 +183,94 @@ public class MySampleApplication implements EntryPoint {
         RootPanel.get("right").add(canvas);
         context = canvas.getContext2d();
 
+        repaint(r);
+
+
+    }
+
+    public void repaint(double r) {
         context.setFillStyle(CssColor.make("white"));
         context.fillRect(0, 0, canvasWidth, canvasHeight);
         context.fill();
 
-        repaint(r);
+        context.setFillStyle(CssColor.make("#38a6ff"));
+        context.beginPath();
+        context.moveTo(half, half);
+        context.lineTo(half - r/2 * mult, half);
+        context.lineTo(half, half - r/2 * mult);
+        context.lineTo(half + r/2 * mult, half);
+        context.lineTo(half, half);
+        context.closePath();
+        context.fill();
+
+        context.rect(half, half, r*mult, r*mult);
+        context.fill();
+        context.arc(half, half, r/2 * mult, 1.5 * Math.PI, 2 * Math.PI);
+        context.fill();
+
+        context.setStrokeStyle("black");
+        context.beginPath();
+        context.moveTo(half - r/2 * mult, half - pad / 3);
+        context.lineTo(half - r/2 * mult, half + pad / 3);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half - r*mult, half - pad / 3);
+        context.lineTo(half - r*mult, half + pad / 3);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half + r/2 * mult, half - pad / 3);
+        context.lineTo(half + r/2 * mult, half + pad / 3);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half + r*mult, half - pad / 3);
+        context.lineTo(half + r*mult, half + pad / 3);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half - pad / 3, half - r*mult);
+        context.lineTo(half + pad / 3, half - r*mult);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half - pad / 3, half - r/2 * mult);
+        context.lineTo(half + pad / 3, half - r/2 * mult);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half - pad / 3, half + r/2 * mult);
+        context.lineTo(half + pad / 3, half + r/2 * mult);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(half - pad / 3, half + r*mult);
+        context.lineTo(half + pad / 3, half + r*mult);
+        context.closePath();
+        context.stroke();
+
+        context.setFont("16px Arial");
+        if (r < 3) context.setFont("12px Arial");
+        context.setFillStyle("black");
+        context.fillText("X", canvasWidth - 2 * pad, half - pad);
+        context.fillText("Y", half + pad, 2 * pad);
+        context.fillText("0", half + 3, half - pad / 2);
+        context.fillText(String.valueOf(r/2.0), half + r/2 * mult - 7, half - pad / 2);
+        context.fillText(String.valueOf(r), half + 2 * r/2 * mult - 4, half - pad / 2);
+        context.fillText(String.valueOf(-r/2.0), half - r/2 * mult - 10, half - pad / 2);
+        context.fillText(String.valueOf(-r), half - 2 * r/2 * mult - 7, half - pad / 2);
+        context.fillText(String.valueOf(r/2.0), half + 6, half - r/2 * mult + 4);
+        context.fillText(String.valueOf(r), half + 6, half - 2 * r/2 * mult + 4);
+        context.fillText(String.valueOf(-r/2.0), half + 6, half + r/2 * mult + 4);
+        context.fillText(String.valueOf(-r), half + 6, half + 2 * r/2 * mult + 4);
 
         context.setStrokeStyle(CssColor.make("black"));
         context.setFillStyle(CssColor.make("black"));
@@ -193,88 +293,13 @@ public class MySampleApplication implements EntryPoint {
         context.moveTo(canvasWidth - pad, half);
         context.lineTo(canvasWidth - pad - pad, half + pad / 2);
         context.stroke();
-    }
-
-    public void repaint(double r) {
-        context.setStrokeStyle(CssColor.make("red"));
-        context.setFillStyle(CssColor.make("#38a6ff"));
-        context.beginPath();
-        context.moveTo(half, half);
-        context.lineTo(half - r * mult, half);
-        context.lineTo(half, half - r * mult);
-        context.lineTo(half + r * mult, half);
-        context.lineTo(half, half);
-        context.closePath();
-        context.fill();
-
-        context.rect(half, half, 2 * r * mult, 2 * r * mult);
-        context.fill();
-        context.arc(half, half, r * mult, 1.5 * Math.PI, 2 * Math.PI);
-        context.fill();
-
-        context.setStrokeStyle("black");
-        context.beginPath();
-        context.moveTo(half - r * mult, half - pad / 3);
-        context.lineTo(half - r * mult, half + pad / 3);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half - 2 * r * mult, half - pad / 3);
-        context.lineTo(half - 2 * r * mult, half + pad / 3);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half + r * mult, half - pad / 3);
-        context.lineTo(half + r * mult, half + pad / 3);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half + 2 * r * mult, half - pad / 3);
-        context.lineTo(half + 2 * r * mult, half + pad / 3);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half - pad / 3, half - 2 * r * mult);
-        context.lineTo(half + pad / 3, half - 2 * r * mult);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half - pad / 3, half - r * mult);
-        context.lineTo(half + pad / 3, half - r * mult);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half - pad / 3, half + r * mult);
-        context.lineTo(half + pad / 3, half + r * mult);
-        context.closePath();
-        context.stroke();
-
-        context.beginPath();
-        context.moveTo(half - pad / 3, half + 2 * r * mult);
-        context.lineTo(half + pad / 3, half + 2 * r * mult);
-        context.closePath();
-        context.stroke();
-
-        context.setFont("16px Arial");
-        if (r < 3) context.setFont("12px Arial");
-        context.setFillStyle("black");
-        context.fillText("X", canvasWidth - 2 * pad, half - pad);
-        context.fillText("Y", half + pad, 2 * pad);
-        context.fillText("0", half + 3, half - pad / 2);
-        context.fillText(String.valueOf(r), half + r * mult - 4, half - pad / 2);
-        context.fillText(String.valueOf(r * 2), half + 2 * r * mult - 4, half - pad / 2);
-        context.fillText(String.valueOf(-r), half - r * mult - 7, half - pad / 2);
-        context.fillText(String.valueOf(-r * 2), half - 2 * r * mult - 7, half - pad / 2);
-        context.fillText(String.valueOf(r), half + 6, half - r * mult + 4);
-        context.fillText(String.valueOf(r * 2), half + 6, half - 2 * r * mult + 4);
-        context.fillText(String.valueOf(-r), half + 6, half + r * mult + 4);
-        context.fillText(String.valueOf(-r * 2), half + 6, half + 2 * r * mult + 4);
+        for (Point point: user.getPoints() ) {
+            context.setFillStyle(CssColor.make(point.checkHitted(r)? "#209002" : "red"));
+            context.beginPath();
+            context.arc(point.getX()*mult + half, half - point.getY()*mult, 3, 0, 2*Math.PI);
+            context.fill();
+            context.closePath();
+        }
     }
 
     private void buildXGrid(){
@@ -289,6 +314,7 @@ public class MySampleApplication implements EntryPoint {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     CheckBoxUnique.doUnique(XList, event);
+
                 }
             });
             checkBox.setStylePrimaryName("Xclass");
@@ -321,22 +347,23 @@ public class MySampleApplication implements EntryPoint {
             RList.add(checkBox);
         }
         rGrid.addStyleName("tableR");
-        RList.get(0).setValue(true);
+        RList.get(2).setValue(true);
     }
     private void buildPointGrid(){
+        pointGrid.addStyleName("tableRes");
         pointGrid.setText(0, 0, "X");
         pointGrid.setText(0, 1, "Y");
         pointGrid.setText(0, 2, "R");
         pointGrid.setText(0, 3, "Is Hitted");
         pointGrid.addStyleName("tableRes");
     }
-    private Double getX(){
+    private Double getX()throws RuntimeException{
         for(int i=0;i<XList.size();i++){
             if(XList.get(i).getValue()){
                 return Double.valueOf(XList.get(i).getFormValue());
             }
         }
-        return null;
+        throw new RuntimeException();
     }
     private Double getY(){
         return YValidator.checkAndReturnY(yText.getText());
@@ -347,7 +374,7 @@ public class MySampleApplication implements EntryPoint {
                 return Double.valueOf(RList.get(i).getFormValue());
             }
         }
-        return null;
+        throw new RuntimeException();
     }
     private boolean sendPoint(double x, double y, double r) {
         UserPoint userPoint = new UserPoint();
@@ -380,9 +407,15 @@ public class MySampleApplication implements EntryPoint {
                 user.getPoints().add(new Point(userPoint.getX(), userPoint.getY(), userPoint.getR()));
                 storage.removeItem("user");
                 storage.setItem("user", UserParser.encode(user));
+
+                context.setFillStyle(CssColor.make(userPoint.checkHitted(r)? "#209002" : "red"));
+                context.beginPath();
+                context.arc(userPoint.getX()*   mult + half, half - userPoint.getY()*mult, 3, 0, 2*Math.PI);
+                context.fill();
+                context.closePath();
             }
         });
-        return userPoint.getHitted();
+        return userPoint.checkHitted();
     }
 }
 

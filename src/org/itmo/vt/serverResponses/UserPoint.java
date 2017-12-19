@@ -1,7 +1,6 @@
 package org.itmo.vt.serverResponses;
 
 import org.itmo.vt.entities.Point;
-import org.itmo.vt.entities.User;
 
 public class UserPoint extends Point {
     private String username;

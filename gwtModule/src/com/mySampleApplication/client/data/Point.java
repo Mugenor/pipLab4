@@ -1,7 +1,5 @@
 package com.mySampleApplication.client.data;
 
-
-
 public class Point {
     private Integer id;
     private Double x;
@@ -11,9 +9,9 @@ public class Point {
 
     public Point(){}
     public Point(Double x, Double y, Double r){
-        this.x = x;
-        this.y = y;
-        this.r = r;
+        this.x = (double)Math.round(x* 1000.0d)/1000.0d;
+        this.y = (double)Math.round(y* 1000.0d)/1000.0d;;
+        this.r = (double)Math.round(r* 1000.0d)/1000.0d;;
         isHitted = checkHitted();
     }
     public boolean checkHitted(){
@@ -27,7 +25,7 @@ public class Point {
     }
 
     public void setX(Double x) {
-        this.x = x;
+        this.x = (double)Math.round(x* 1000.0d)/1000.0d;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class Point {
     }
 
     public void setY(Double y) {
-        this.y = y;
+        this.y = (double)Math.round(y* 1000.0d)/1000.0d;
     }
 
     public Double getR() {
@@ -58,7 +56,7 @@ public class Point {
     }
 
     public void setR(Double r) {
-        this.r = r;
+        this.r = (double)Math.round(r * 1000.0d)/1000.0d;
     }
 
     public Boolean getHitted() {
@@ -78,5 +76,11 @@ public class Point {
 
     public String toString(){
         return "{\"x\":" + x + ",\"y\":" + y + ",\"r\":" + r + ",\"isHitted\":" + isHitted + "}";
+    }
+    public boolean checkHitted(Double R){
+        return (x>=0.0 && y>=0.0 && (x*x+y*y)<=(R*R/4)) ||
+                (x>=0.0 && y<=0.0 && x<=R && y>=-R) ||
+                (x<=0.0 && y>=0.0 && y<=x+R/2.0);
+
     }
 }

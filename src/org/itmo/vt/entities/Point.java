@@ -14,17 +14,22 @@ public class Point {
     private Double r;
     private Boolean isHitted;
 
-    public Point(){}
-    public Point(Double x, Double y, Double r){
-        this.x = x;
-        this.y = y;
-        this.r = r;
+    public Point() {
+    }
+
+    public Point(Double x, Double y, Double r) {
+        this.x = (double) Math.round(x * 1000.0d) / 1000.0d;
+        this.y = (double) Math.round(y * 1000.0d) / 1000.0d;
+        ;
+        this.r = (double) Math.round(r * 1000.0d) / 1000.0d;
+        ;
         checkHitted();
     }
-    public boolean checkHitted(){
-        return (x>=0.0 && y>=0.0 && (x*x+y*y)<=(r*r/4)) ||
-                (x>=0.0 && y<=0.0 && x<=r && y>=-r) ||
-                (x<=0.0 && y>=0.0 && y<=x+r/2.0);
+
+    public boolean checkHitted() {
+        return (x >= 0.0 && y >= 0.0 && (x * x + y * y) <= (r * r / 4)) ||
+                (x >= 0.0 && y <= 0.0 && x <= r && y >= -r) ||
+                (x <= 0.0 && y >= 0.0 && y <= x + r / 2.0);
     }
 
     public Double getX() {
@@ -32,7 +37,7 @@ public class Point {
     }
 
     public void setX(Double x) {
-        this.x = x;
+        this.x = (double) Math.round(x * 1000.0d) / 1000.0d;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class Point {
     }
 
     public void setY(Double y) {
-        this.y = y;
+        this.y = (double) Math.round(y * 1000.0d) / 1000.0d;
     }
 
     public Double getR() {
@@ -63,7 +68,7 @@ public class Point {
     }
 
     public void setR(Double r) {
-        this.r = r;
+        this.r = (double) Math.round(r * 1000.0d) / 1000.0d;
     }
 
     public Boolean getHitted() {
@@ -74,14 +79,15 @@ public class Point {
         isHitted = hitted;
     }
 
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
-    public void setId(Integer id){
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String toString(){
+    public String toString() {
         return "{\"x\":" + x + ",\"y\":" + y + ",\"r\":" + r + ",\"isHitted\":" + isHitted + "}";
     }
 }

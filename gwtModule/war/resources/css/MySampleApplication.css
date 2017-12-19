@@ -52,7 +52,7 @@ header {
     color: #b5fff8;
 }
 
-#pointLabel {
+.errorLabel {
     font-size: 14px;
     color:red;
 }
@@ -131,6 +131,10 @@ canvas {
     text-align: center;
 }
 
+.tableRes tbody:first-child{
+    font-weight: bold;
+}
+
 .mainCanvas {
     outline: 2px solid #000000;
     border: 2px solid #fff;
@@ -138,15 +142,12 @@ canvas {
 
 @media screen and (max-width: 749px) {
     body {
-        background-image: url(resources/images/ariel_small.jpg);
+        background-image: url(../images/ariel_small.jpg);
     }
     #left {
         width: 70%;
         margin-left: 15%;
         min-width: 300px;
-    }
-    #right {
-        margin-left: 15%;
     }
     .tableX {
         width: 86%;
@@ -164,6 +165,9 @@ canvas {
 }
 
 @media screen and (min-width: 749px) and (max-width: 1217px) {
+    body {
+        background-image: url(../images/ariel_mid.jpg);
+    }
     #left {
         float: left;
         width: 40%;
